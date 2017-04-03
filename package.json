@@ -2,13 +2,15 @@
   "name": "ngrx-course",
   "version": "0.0.0",
   "license": "MIT",
+  "angular-cli": {},
   "scripts": {
-    "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "test": "ng test",
-    "lint": "ng lint",
-    "e2e": "ng e2e"
+    "start": "./node_modules/.bin/ng serve --proxy-config proxy.conf.json",
+    "lint": "tslint \"src/**/*.ts\"",
+    "test": "./node_modules/.bin/ng test",
+    "pree2e": "webdriver-manager update",
+    "e2e": "protractor",
+    "api-server": "./node_modules/.bin/ts-node ./src/server/server.ts",
+    "api-server:debug": "./node_modules/.bin/ts-node $NODE_DEBUG_OPTION ./src/server/server.ts"
   },
   "private": true,
   "dependencies": {
@@ -22,7 +24,22 @@
     "@angular/router": "^4.0.0",
     "core-js": "^2.4.1",
     "rxjs": "^5.1.0",
-    "zone.js": "^0.8.4"
+    "zone.js": "^0.8.4",
+    "@types/express": "^4.0.35",
+    "@types/lodash": "^4.14.52",
+    "angularfire2": "^2.0.0-beta.8",
+    "body-parser": "^1.17.1",
+    "express": "^4.15.2",
+    "firebase": "^3.7.0",
+    "lodash": "^4.17.4",
+    "ts-helpers": "^1.1.1",
+    "@ngrx/core": "^1.2.0",
+    "@ngrx/effects": "^2.0.0",
+    "@ngrx/router-store": "^1.2.5",
+    "@ngrx/store": "^2.2.1",
+    "@ngrx/store-devtools": "^3.2.2",
+    "reselect": "^2.5.4",
+    "uuid": "^3.0.1"
   },
   "devDependencies": {
     "@angular/cli": "1.0.0",
@@ -41,6 +58,12 @@
     "protractor": "~5.1.0",
     "ts-node": "~2.0.0",
     "tslint": "~4.5.0",
-    "typescript": "~2.2.0"
+    "typescript": "~2.2.0",
+    "@types/express": "^4.0.34",
+    "@types/lodash": "^4.14.44",
+    "body-parser": "^1.15.2",
+    "karma-remap-istanbul": "^0.2.1",
+    "ngrx-store-freeze": "^0.1.6",
+    "webdriver-manager": "10.2.5"
   }
 }
