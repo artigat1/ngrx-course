@@ -2,7 +2,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {HttpModule} from '@angular/http';
-import {Action, StoreModule} from '@ngrx/store';
+import {StoreModule} from '@ngrx/store';
 
 import * as _ from 'lodash';
 
@@ -16,7 +16,7 @@ import {ThreadsService} from './services/threads.service';
 import {ApplicationState, INITIAL_APPLICATION_STATE} from './store/application-state';
 import {LOAD_USER_THREADS_ACTION, LoadUserThreadsAction} from './store/actions';
 
-function storeReducer(state: ApplicationState,
+export function storeReducer(state: ApplicationState = INITIAL_APPLICATION_STATE,
                       action: any): ApplicationState {
   switch (action.type) {
 
@@ -28,7 +28,7 @@ function storeReducer(state: ApplicationState,
   }
 }
 
-function handleLoadUserThreadsAction(state: ApplicationState, action: LoadUserThreadsAction): ApplicationState {
+export function handleLoadUserThreadsAction(state: ApplicationState, action: LoadUserThreadsAction): ApplicationState {
   const userData = action.payload;
 
   const newState: ApplicationState = Object.assign({}, state);
@@ -55,7 +55,7 @@ function handleLoadUserThreadsAction(state: ApplicationState, action: LoadUserTh
     BrowserModule,
     FormsModule,
     HttpModule,
-    StoreModule.provideStore(storeReducer, INITIAL_APPLICATION_STATE)
+    StoreModule.provideStore(storeReducer)
   ],
   providers: [ThreadsService],
   bootstrap: [AppComponent]
