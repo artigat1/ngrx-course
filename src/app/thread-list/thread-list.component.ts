@@ -8,7 +8,7 @@ import {ThreadSummaryVM} from '../thread-section/thread-summary.vm';
 })
 export class ThreadListComponent implements OnInit {
 
-  @Input() threadSummaries: ThreadSummaryVM[];
+  @Input() threads: ThreadSummaryVM[];
 
   constructor() {
   }
