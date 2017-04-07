@@ -1,15 +1,12 @@
 import {Component, OnInit} from '@angular/core';
-import {ThreadsService} from '../services/threads.service';
 import {Store} from '@ngrx/store';
 import {Observable} from 'rxjs/Observable';
 
-import * as _ from 'lodash';
-
 import {ApplicationState} from '../store/application-state';
-import {LoadUserThreadsAction} from '../store/actions';
-import {Thread} from '../../../shared/model/thread';
 import {ThreadSummaryVM} from './thread-summary.vm';
-import {mapStateToUserName} from './mapStateToUserName';
+import {LoadUserThreadsAction} from '../store/actions';
+
+import {userNameSelector} from './userNameSelector';
 import {mapStateToUnreadMessagesCounter} from './mapStateToUnreadMessagesCounter';
 import {stateToThreadSummariesSelector} from './stateToThreadSummariesSelector';
 
@@ -25,25 +22,16 @@ export class ThreadSectionComponent implements OnInit {
   unreadMessagesCounter$: Observable<number>;
   threadSummaries$: Observable<ThreadSummaryVM[]>;
 
-  constructor(private threadsService: ThreadsService,
-              private store: Store<ApplicationState>) {
-    this.userName$ = store
-      .skip(1)
-      .map(mapStateToUserName);
+  constructor(private store: Store<ApplicationState>) {
 
-    this.unreadMessagesCounter$ = store
-      .skip(1)
-      .map(mapStateToUnreadMessagesCounter);
+    this.userName$ = store.select(userNameSelector);
+
+    this.unreadMessagesCounter$ = store.map(mapStateToUnreadMessagesCounter);
 
     this.threadSummaries$ = store.select(stateToThreadSummariesSelector);
   }
 
   ngOnInit() {
-    this.threadsService.loadUserThreads()
-      .subscribe(
-        allUserData => this.store.dispatch(
-          new LoadUserThreadsAction(allUserData)
-        )
-      );
+    this.store.dispatch(new LoadUserThreadsAction());
   }
 }
