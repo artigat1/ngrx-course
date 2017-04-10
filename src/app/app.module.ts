@@ -3,9 +3,8 @@ import {NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {HttpModule} from '@angular/http';
 import {EffectsModule} from '@ngrx/effects';
-import {StoreModule} from '@ngrx/store';
-
-import * as _ from 'lodash';
+import {combineReducers, StoreModule} from '@ngrx/store';
+import {StoreDevtoolsModule} from '@ngrx/store-devtools';
 
 import {AppComponent} from './app.component';
 import {UserSelectionComponent} from './user-selection/user-selection.component';
@@ -14,36 +13,10 @@ import {MessageSectionComponent} from './message-section/message-section.compone
 import {ThreadListComponent} from './thread-list/thread-list.component';
 import {MessageListComponent} from './message-list/message-list.component';
 import {ThreadsService} from './services/threads.service';
-import {ApplicationState, INITIAL_APPLICATION_STATE} from './store/application-state';
-import {USER_THREADS_LOADED_ACTION, UserThreadsLoadedAction} from './store/actions';
+import {INITIAL_APPLICATION_STATE} from './store/application-state';
 import {LoadThreadsEffectService} from './store/effects/load-threads-effect.service';
-import {StoreDevtoolsModule} from '@ngrx/store-devtools';
-
-export function storeReducer(state: ApplicationState = INITIAL_APPLICATION_STATE,
-                             action: any): ApplicationState {
-  switch (action.type) {
-
-    case USER_THREADS_LOADED_ACTION:
-      return handleLoadUserThreadsAction(state, action);
-
-    default:
-      return state;
-  }
-}
-
-export function handleLoadUserThreadsAction(state: ApplicationState, action: UserThreadsLoadedAction): ApplicationState {
-  const userData = action.payload;
-
-  const newState: ApplicationState = Object.assign({}, state);
-
-  newState.storeData = {
-    participants: _.keyBy(userData.participants, 'id'),
-    messages: _.keyBy(userData.messages, 'id'),
-    threads: _.keyBy(userData.threads, 'id')
-  };
-
-  return newState;
-}
+import {uiState} from 'app/store/reducers/uiStateReducer';
+import {storeData} from './store/reducers/storeDataReducer';
 
 @NgModule({
   declarations: [
@@ -62,7 +35,7 @@ export function handleLoadUserThreadsAction(state: ApplicationState, action: Use
     StoreDevtoolsModule.instrumentOnlyWithExtension({
       maxAge: 50
     }),
-    StoreModule.provideStore(storeReducer)
+    StoreModule.provideStore(combineReducers({uiState, storeData}), INITIAL_APPLICATION_STATE)
   ],
   providers: [ThreadsService],
   bootstrap: [AppComponent]
