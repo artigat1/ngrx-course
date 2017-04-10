@@ -17,6 +17,7 @@ import {ThreadsService} from './services/threads.service';
 import {ApplicationState, INITIAL_APPLICATION_STATE} from './store/application-state';
 import {USER_THREADS_LOADED_ACTION, UserThreadsLoadedAction} from './store/actions';
 import {LoadThreadsEffectService} from './store/effects/load-threads-effect.service';
+import {StoreDevtoolsModule} from '@ngrx/store-devtools';
 
 export function storeReducer(state: ApplicationState = INITIAL_APPLICATION_STATE,
                              action: any): ApplicationState {
@@ -58,6 +59,9 @@ export function handleLoadUserThreadsAction(state: ApplicationState, action: Use
     EffectsModule.run(LoadThreadsEffectService),
     FormsModule,
     HttpModule,
+    StoreDevtoolsModule.instrumentOnlyWithExtension({
+      maxAge: 50
+    }),
     StoreModule.provideStore(storeReducer)
   ],
   providers: [ThreadsService],
