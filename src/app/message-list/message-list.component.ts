@@ -1,15 +1,23 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input} from '@angular/core';
+import {MessageVM} from '../message-section/message.vm';
 
 @Component({
   selector: 'message-list',
   templateUrl: './message-list.component.html',
   styleUrls: ['./message-list.component.css']
 })
-export class MessageListComponent implements OnInit {
+export class MessageListComponent {
 
-  constructor() { }
+  @Input()
+  messages: MessageVM[];
+
+
+  constructor() {
+
+  }
 
   ngOnInit() {
+
   }
 
 }

@@ -10,7 +10,11 @@ export class ThreadListComponent {
 
   @Input() threads: ThreadSummaryVM[];
 
+  @Input() currentSelectedThreadId: number;
+
   @Output() threadSelected = new EventEmitter<number>();
+
+
 
   selectThread(threadId: number): void {
     this.threadSelected.emit(threadId);

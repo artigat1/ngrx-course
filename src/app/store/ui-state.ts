@@ -1,6 +1,6 @@
 export interface UiState {
   userId: number;
-  currentThreadId: number
+  currentThreadId: number;
 }
 
 export const INITIAL_UI_STATE: UiState = {

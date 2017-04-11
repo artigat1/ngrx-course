@@ -3,7 +3,7 @@ import {Action} from '@ngrx/store';
 import {INITIAL_UI_STATE, UiState} from '../ui-state';
 import {THREAD_SELECTED_ACTION} from '../actions';
 
-export function uiState(state: UiState = INITIAL_UI_STATE, action: Action): UiState {
+export function uiStateReducer(state: UiState = INITIAL_UI_STATE, action: Action): UiState {
 
   switch (action.type) {
 
