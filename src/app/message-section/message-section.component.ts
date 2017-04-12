@@ -6,6 +6,8 @@ import {ApplicationState} from '../store/application-state';
 import {MessageVM} from './message.vm';
 import {messageParticipantNamesSelector} from './messageParticipantNamesSelector';
 import {messagesSelector} from './messagesSelector';
+import {SendNewMessageAction} from '../store/actions';
+import {UiState} from '../store/ui-state';
 
 @Component({
   selector: 'message-section',
@@ -16,6 +18,7 @@ export class MessageSectionComponent {
 
   participantNames$: Observable<string>;
   messages$: Observable<MessageVM[]>;
+  uiState: UiState;
 
   constructor(private store: Store<ApplicationState>) {
 
@@ -23,6 +26,16 @@ export class MessageSectionComponent {
 
     this.messages$ = store.select(messagesSelector);
 
+    store.subscribe(state => this.uiState = Object.assign({}, state.uiState));
+  }
+
+  onNewMessage(input: any): void {
+    this.store.dispatch(
+      new SendNewMessageAction({
+        text: input.value,
+        threadId: this.uiState.currentThreadId,
+        participantId: this.uiState.userId
+      }));
   }
 
 }
