@@ -1,13 +1,16 @@
 import * as _ from 'lodash';
-
-const uuid = require('uuid/v4');
-
 import {INITIAL_STORE_DATA, StoreData} from '../store-data';
 import {
-  NEW_MESSAGES_RECEIVED_ACTION, NewMessagesReceivedAction, SEND_NEW_MESSAGE_ACTION, SendNewMessageAction, USER_THREADS_LOADED_ACTION,
+  NEW_MESSAGES_RECEIVED_ACTION,
+  NewMessagesReceivedAction,
+  SEND_NEW_MESSAGE_ACTION,
+  SendNewMessageAction,
+  USER_THREADS_LOADED_ACTION,
   UserThreadsLoadedAction
 } from '../actions';
 import {Message} from '../../../../shared/model/message';
+
+const uuid = require('uuid/v4');
 
 export function storeDataReducer(state: StoreData = INITIAL_STORE_DATA, action: any): StoreData {
 
@@ -58,11 +61,17 @@ function handleSendNewMessageAction(state: StoreData, action: SendNewMessageActi
 function handleNewMessagesReceivedAction(state: StoreData, action: NewMessagesReceivedAction): StoreData {
   const newStoreState = _.cloneDeep(state);
 
-  const newMessages: Message[] = action.payload;
+  const newMessages: Message[] = action.payload.unreadMessages;
+  const currentThreadId: number = action.payload.currentThreadId;
+  const currentUserId: number = action.payload.currentUserId;
 
   newMessages.forEach(message => {
     newStoreState.messages[message.id] = message;
     newStoreState.threads[message.threadId].messageIds.push(message.id);
+
+    if (message.threadId !== currentThreadId) {
+      newStoreState.threads[message.threadId].participants[currentUserId] += 1;
+    }
   });
 
   return newStoreState;

@@ -6,6 +6,8 @@ import {Observable} from 'rxjs/Rx';
 import {ThreadsService} from '../../services/threads.service';
 import {NewMessagesReceivedAction} from '../actions';
 import {ApplicationState} from '../application-state';
+import {Message} from '../../../../shared/model/message';
+import {UiState} from '../ui-state';
 
 @Injectable()
 export class ServerNotificationsEffectService {
@@ -19,7 +21,13 @@ export class ServerNotificationsEffectService {
     .interval(3000)
     .withLatestFrom(this.store.select('uiState'))
     .map(([any, uiState]) => uiState)
-    .filter((uiState: any) => !!uiState.userId)
+    .filter((uiState: any) => uiState.userId)
     .switchMap(uiState => this.threadsService.loadNewMessagesForUser(uiState.userId))
-    .map(messages => new NewMessagesReceivedAction(messages));
+    .debug('new messages received from server')
+    .withLatestFrom(this.store.select('uiState'))
+    .map(([unreadMessages, uiState]: [Message[], UiState]) => new NewMessagesReceivedAction({
+      unreadMessages,
+      currentThreadId: uiState.currentThreadId,
+      currentUserId: uiState.userId
+    }))
 }
