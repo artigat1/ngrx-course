@@ -36,6 +36,7 @@ export class MessageSectionComponent {
         threadId: this.uiState.currentThreadId,
         participantId: this.uiState.userId
       }));
+    input.value = '';
   }
 
 }

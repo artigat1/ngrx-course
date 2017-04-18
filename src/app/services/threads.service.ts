@@ -16,9 +16,7 @@ export class ThreadsService {
 
   loadUserThreads(userId: number): Observable<AllUserData> {
     return this.http
-      .get(
-        '/api/threads',
-        commonHttpHeaders(userId))
+      .get('/api/threads', commonHttpHeaders(userId))
       .map(res => res.json());
   }
 
@@ -27,13 +25,12 @@ export class ThreadsService {
     const body: any = JSON.stringify({text: payload.text});
 
     return this.http
-      .post(
-        `/api/threads/${payload.threadId}`,
-        body,
-        commonHttpHeaders(payload.participantId));
+      .post(`/api/threads/${payload.threadId}`, body, commonHttpHeaders(payload.participantId));
   }
 
-  loadNewMessagesForUser(): Observable<Message[]> {
-    return null;
+  loadNewMessagesForUser(userId: number): Observable<Message[]> {
+    return this.http
+      .post('/api/notifications/messages', null, commonHttpHeaders(userId))
+      .map(res => res.json().payload);
   }
 }
