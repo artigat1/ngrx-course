@@ -14,8 +14,6 @@ export class ThreadListComponent {
 
   @Output() threadSelected = new EventEmitter<number>();
 
-
-
   selectThread(threadId: number): void {
     this.threadSelected.emit(threadId);
   }
