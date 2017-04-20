@@ -5,6 +5,8 @@ import {
   NewMessagesReceivedAction,
   SEND_NEW_MESSAGE_ACTION,
   SendNewMessageAction,
+  THREAD_SELECTED_ACTION,
+  ThreadSelectedAction,
   USER_THREADS_LOADED_ACTION,
   UserThreadsLoadedAction
 } from '../actions';
@@ -24,6 +26,9 @@ export function storeDataReducer(state: StoreData = INITIAL_STORE_DATA, action: 
 
     case NEW_MESSAGES_RECEIVED_ACTION:
       return handleNewMessagesReceivedAction(state, action);
+
+    case THREAD_SELECTED_ACTION:
+      return handleThreadSelectedAction(state, action);
 
     default:
       return state;
@@ -57,7 +62,6 @@ function handleSendNewMessageAction(state: StoreData, action: SendNewMessageActi
   return newStoreData;
 }
 
-
 function handleNewMessagesReceivedAction(state: StoreData, action: NewMessagesReceivedAction): StoreData {
   const newStoreState = _.cloneDeep(state);
 
@@ -73,6 +77,15 @@ function handleNewMessagesReceivedAction(state: StoreData, action: NewMessagesRe
       newStoreState.threads[message.threadId].participants[currentUserId] += 1;
     }
   });
+
+  return newStoreState;
+}
+
+function handleThreadSelectedAction(state: StoreData, action: ThreadSelectedAction): StoreData {
+  const newStoreState = _.cloneDeep(state);
+  const currentThread = newStoreState.threads[action.payload.selectedThreadId];
+
+  currentThread.participants[action.payload.currentUserId] = 0;
 
   return newStoreState;
 }

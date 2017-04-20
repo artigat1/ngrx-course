@@ -16,7 +16,7 @@ export function apiUpdateThread(app: Application) {
 
     const allThreads: Thread[] = <any> _.values(dbThreads);
 
-    const thread = _.find(allThreads, t => t.id === threadId);
+    const thread = _.find(allThreads, thread =>  thread.id = threadId );
 
     if (updatedProps.hasOwnProperty('read')) {
       thread.participants[participantId] = 0;

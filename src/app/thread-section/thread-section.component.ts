@@ -1,10 +1,13 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {Store} from '@ngrx/store';
 import {Observable} from 'rxjs/Observable';
 
+import * as _ from 'lodash';
+
 import {ApplicationState} from '../store/application-state';
 import {ThreadSummaryVM} from './thread-summary.vm';
-import {LoadUserThreadsAction, ThreadSelectedAction} from '../store/actions';
+import {ThreadSelectedAction} from '../store/actions';
+import {UiState} from '../store/ui-state';
 
 import {userNameSelector} from './userNameSelector';
 import {mapStateToUnreadMessagesCounter} from './mapStateToUnreadMessagesCounter';
@@ -21,7 +24,8 @@ export class ThreadSectionComponent {
   userName$: Observable<string>;
   unreadMessagesCounter$: Observable<number>;
   threadSummaries$: Observable<ThreadSummaryVM[]>;
-  currentSelectedThreadId$: Observable<number>;
+
+  uiState: UiState;
 
   constructor(private store: Store<ApplicationState>) {
 
@@ -31,10 +35,12 @@ export class ThreadSectionComponent {
 
     this.threadSummaries$ = store.select(stateToThreadSummariesSelector);
 
-    this.currentSelectedThreadId$ = store.select(state => state.uiState.currentThreadId);
+    store
+      .select(state => state.uiState)
+      .subscribe(uiState => this.uiState = _.cloneDeep(uiState));
   }
 
   onThreadSelected(selectedThreadId: number): void {
-    this.store.dispatch(new ThreadSelectedAction(selectedThreadId));
+    this.store.dispatch(new ThreadSelectedAction({selectedThreadId, currentUserId: this.uiState.userId}));
   }
 }

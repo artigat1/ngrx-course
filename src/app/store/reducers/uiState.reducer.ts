@@ -9,7 +9,7 @@ export function uiStateReducer(state: UiState = INITIAL_UI_STATE, action: Action
 
     case THREAD_SELECTED_ACTION:
       return Object.assign({}, state, {
-        currentThreadId: action.payload
+        currentThreadId: action.payload.selectedThreadId
       });
 
     case SELECT_USER_ACTION:
