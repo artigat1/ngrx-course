@@ -1,7 +1,7 @@
 import {Action} from '@ngrx/store';
 
 import {INITIAL_UI_STATE, UiState} from '../ui-state';
-import {SELECT_USER_ACTION, THREAD_SELECTED_ACTION} from '../actions';
+import {ERROR_OCCURRED_ACTION, SELECT_USER_ACTION, THREAD_SELECTED_ACTION} from '../actions';
 
 export function uiStateReducer(state: UiState = INITIAL_UI_STATE, action: Action): UiState {
 
@@ -16,6 +16,11 @@ export function uiStateReducer(state: UiState = INITIAL_UI_STATE, action: Action
       return Object.assign({}, state, {
         userId: action.payload,
         currentThreadId: undefined
+      });
+
+    case ERROR_OCCURRED_ACTION:
+      return Object.assign({}, state, {
+        currentError: action.payload
       });
 
     default:

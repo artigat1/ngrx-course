@@ -6,6 +6,7 @@ import {enableProdMode} from '@angular/core';
 import {environment} from './environments/environment';
 import {AppModule} from './app/';
 
+import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/skip';

@@ -18,6 +18,7 @@ import {ThreadsService} from './services/threads.service';
 import {UserSelectionComponent} from './user-selection/user-selection.component';
 import {WriteNewMessageEffectService} from './store/effects/write-new-messages-effect.service';
 import {storeReducer} from './store/reducers/store.reducer';
+import {MessagesComponent} from './messages/messages.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import {storeReducer} from './store/reducers/store.reducer';
     ThreadSectionComponent,
     MessageSectionComponent,
     ThreadListComponent,
-    MessageListComponent
+    MessageListComponent,
+    MessagesComponent
   ],
   imports: [
     BrowserModule,
