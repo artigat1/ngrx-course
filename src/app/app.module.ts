@@ -19,6 +19,10 @@ import {UserSelectionComponent} from './user-selection/user-selection.component'
 import {WriteNewMessageEffectService} from './store/effects/write-new-messages-effect.service';
 import {appReducer} from './store/reducers/store.reducer';
 import {MessagesComponent} from './messages/messages.component';
+import {RouterModule} from '@angular/router';
+import {routes} from './app.routes';
+import { HomeComponent } from './home/home.component';
+import { AboutComponent } from './about/about.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +32,9 @@ import {MessagesComponent} from './messages/messages.component';
     MessageSectionComponent,
     ThreadListComponent,
     ThreadSectionComponent,
-    UserSelectionComponent
+    UserSelectionComponent,
+    HomeComponent,
+    AboutComponent
   ],
   imports: [
     BrowserModule,
@@ -38,6 +44,7 @@ import {MessagesComponent} from './messages/messages.component';
     EffectsModule.run(WriteNewMessageEffectService),
     FormsModule,
     HttpModule,
+    RouterModule.forRoot(routes, {useHash: true}),
     StoreDevtoolsModule.instrumentOnlyWithExtension({
       maxAge: 50
     }),
