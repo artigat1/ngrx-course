@@ -23,6 +23,7 @@ import {RouterModule} from '@angular/router';
 import {routes} from './app.routes';
 import { HomeComponent } from './home/home.component';
 import { AboutComponent } from './about/about.component';
+import {RouterStoreModule} from '@ngrx/router-store';
 
 @NgModule({
   declarations: [
@@ -45,10 +46,11 @@ import { AboutComponent } from './about/about.component';
     FormsModule,
     HttpModule,
     RouterModule.forRoot(routes, {useHash: true}),
+    RouterStoreModule.connectRouter(),
+    StoreModule.provideStore(appReducer),
     StoreDevtoolsModule.instrumentOnlyWithExtension({
       maxAge: 50
-    }),
-    StoreModule.provideStore(appReducer)
+    })
   ],
   providers: [ThreadsService],
   bootstrap: [AppComponent]
