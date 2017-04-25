@@ -1,4 +1,4 @@
-import {Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild} from '@angular/core';
+import {ChangeDetectionStrategy, Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild} from '@angular/core';
 
 import * as _ from 'lodash';
 
@@ -7,7 +7,8 @@ import {MessageVM} from '../message-section/message.vm';
 @Component({
   selector: 'message-list',
   templateUrl: './message-list.component.html',
-  styleUrls: ['./message-list.component.css']
+  styleUrls: ['./message-list.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MessageListComponent implements OnChanges {
 

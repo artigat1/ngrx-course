@@ -45,9 +45,16 @@ function handleLoadUserThreadsAction(state: StoreData, action: UserThreadsLoaded
 }
 
 function handleSendNewMessageAction(state: StoreData, action: SendNewMessageAction): StoreData {
-  const newStoreData = _.cloneDeep(state);
+  const newStoreData: StoreData = {
+    participants: state.participants,
+    threads: Object.assign({}, state.threads),
+    messages: Object.assign({}, state.messages)
+  };
+
+  newStoreData.threads[action.payload.threadId] = Object.assign({}, state.threads[action.payload.threadId]);
 
   const currentThread = newStoreData.threads[action.payload.threadId];
+
   const newMessage: Message = {
     text: action.payload.text,
     threadId: action.payload.threadId,
@@ -56,7 +63,9 @@ function handleSendNewMessageAction(state: StoreData, action: SendNewMessageActi
     id: uuid()
   };
 
+  currentThread.messageIds = currentThread.messageIds.slice(0);
   currentThread.messageIds.push(newMessage.id);
+
   newStoreData.messages[newMessage.id] = newMessage;
 
   return newStoreData;
