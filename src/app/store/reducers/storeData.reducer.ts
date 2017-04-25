@@ -71,10 +71,10 @@ function handleNewMessagesReceivedAction(state: StoreData, action: NewMessagesRe
 
   newMessages.forEach(message => {
     newStoreState.messages[message.id] = message;
-    newStoreState.threads[message.threadId].messageIds.push(message.id);
+    state.threads[message.threadId].messageIds.push(message.id);
 
     if (message.threadId !== currentThreadId) {
-      newStoreState.threads[message.threadId].participants[currentUserId] += 1;
+      state.threads[message.threadId].participants[currentUserId] += 1;
     }
   });
 

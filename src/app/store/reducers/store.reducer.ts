@@ -1,13 +1,24 @@
-import {Action} from '@ngrx/store';
+import {ActionReducer, combineReducers} from '@ngrx/store';
+import {compose} from '@ngrx/core';
+import {storeFreeze} from 'ngrx-store-freeze';
 
 import {ApplicationState, INITIAL_APPLICATION_STATE} from '../application-state';
 import {uiStateReducer} from './uiState.reducer';
 import {storeDataReducer} from './storeData.reducer';
+import {environment} from '../../../environments/environment';
 
-export function storeReducer(state: ApplicationState = INITIAL_APPLICATION_STATE,
-                             action: Action): ApplicationState {
-  return {
-    uiState: uiStateReducer(state.uiState, action),
-    storeData: storeDataReducer(state.storeData, action)
-  };
+const reducers = {
+  uiState: uiStateReducer,
+  storeData: storeDataReducer
+};
+
+const developmentReducer: ActionReducer<ApplicationState> = compose(storeFreeze, combineReducers)(reducers);
+const productionReducer: ActionReducer<ApplicationState> = combineReducers(reducers);
+
+export function appReducer(state: ApplicationState = INITIAL_APPLICATION_STATE, action: any) {
+  if (environment.production) {
+    return productionReducer(state, action);
+  }
+
+  return developmentReducer(state, action);
 }

@@ -1,25 +1,30 @@
+
+
+
 import {Application} from 'express';
-import {dbMessagesQueuePerUser, dbMessages, dbThreads} from '../db-data';
+import {dbMessagesQueuePerUser, dbMessages, dbThreads} from "../db-data";
+
 
 export function apiMessageNotificationsPerUser(app: Application) {
 
-  app.route('/api/notifications/messages').post((req, res) => {
 
-    const participantId = req.headers['userid'];
+    app.route('/api/notifications/messages').post((req, res) => {
 
-    if (!participantId) {
-      res.status(200).json({payload: []});
-      return;
-    }
+        const participantId = req.headers['userid'];
 
-    const unreadMessageIds = dbMessagesQueuePerUser[participantId];
+        if (!participantId) {
+            res.status(200).json({payload:[]});
+            return;
+        }
 
-    const unreadMessages = unreadMessageIds.map(messageId => dbMessages[messageId]);
+        const unreadMessageIds = dbMessagesQueuePerUser[participantId];
 
-    dbMessagesQueuePerUser[participantId] = [];
+        const unreadMessages = unreadMessageIds.map( messageId => dbMessages[messageId] );
 
-    res.status(200).json({payload: unreadMessages});
+        dbMessagesQueuePerUser[participantId] = [];
 
-  });
+        res.status(200).json({payload: unreadMessages});
+
+    });
 
 }
