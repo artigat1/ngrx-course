@@ -72,7 +72,11 @@ function handleSendNewMessageAction(state: StoreData, action: SendNewMessageActi
 }
 
 function handleNewMessagesReceivedAction(state: StoreData, action: NewMessagesReceivedAction): StoreData {
-  const newStoreState = _.cloneDeep(state);
+  const newStoreState: StoreData = {
+    participants: state.participants,
+    threads: _.clone(state.threads),
+    messages: _.clone(state.messages)
+  };
 
   const newMessages: Message[] = action.payload.unreadMessages;
   const currentThreadId: number = action.payload.currentThreadId;
@@ -80,10 +84,15 @@ function handleNewMessagesReceivedAction(state: StoreData, action: NewMessagesRe
 
   newMessages.forEach(message => {
     newStoreState.messages[message.id] = message;
-    newStoreState.threads[message.threadId].messageIds.push(message.id);
+
+    const messageThread = _.clone(state.threads[message.threadId]);
+
+    messageThread.messageIds = _.clone(messageThread.messageIds);
+    messageThread.messageIds.push(message.id);
 
     if (message.threadId !== currentThreadId) {
-      newStoreState.threads[message.threadId].participants[currentUserId] += 1;
+      messageThread.participants = _.clone(newStoreState.threads[message.threadId].participants);
+      messageThread.participants[currentUserId] += 1;
     }
   });
 
@@ -91,8 +100,17 @@ function handleNewMessagesReceivedAction(state: StoreData, action: NewMessagesRe
 }
 
 function handleThreadSelectedAction(state: StoreData, action: ThreadSelectedAction): StoreData {
-  const newStoreState = _.cloneDeep(state);
+  const newStoreState: StoreData = {
+    participants: Object.assign({}, state.participants),
+    messages: Object.assign({}, state.messages),
+    threads: Object.assign({}, state.threads)
+  };
+
+  newStoreState.threads[action.payload.selectedThreadId] = Object.assign({}, state.threads[action.payload.selectedThreadId]);
+
   const currentThread = newStoreState.threads[action.payload.selectedThreadId];
+
+  currentThread.participants = Object.assign({}, currentThread.participants);
 
   currentThread.participants[action.payload.currentUserId] = 0;
 
